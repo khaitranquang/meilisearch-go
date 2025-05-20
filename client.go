@@ -24,7 +24,7 @@ type client struct {
 	disableRetry    bool
 	maxRetries      uint8
 	retryBackoff    func(attempt uint8) time.Duration
-	customHeaders   []map[string]string
+	customHeaders   map[string]string
 }
 
 type clientConfig struct {
@@ -33,7 +33,7 @@ type clientConfig struct {
 	retryOnStatus            map[int]bool
 	disableRetry             bool
 	maxRetries               uint8
-	customHeaders            []map[string]string
+	customHeaders            map[string]string
 }
 
 type internalRequest struct {
@@ -233,10 +233,8 @@ func (c *client) sendRequest(
 		request.Header.Set("Authorization", "Bearer "+c.apiKey)
 	}
 	if c.customHeaders != nil {
-		for _, customHeader := range c.customHeaders {
-			for key, value := range customHeader {
-				request.Header.Set(key, value)
-			}
+		for key, value := range c.customHeaders {
+			request.Header.Set(key, value)
 		}
 	}
 
