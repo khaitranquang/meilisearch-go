@@ -24,6 +24,7 @@ type client struct {
 	disableRetry    bool
 	maxRetries      uint8
 	retryBackoff    func(attempt uint8) time.Duration
+	customHeaders   []map[string]string
 }
 
 type clientConfig struct {
@@ -32,6 +33,7 @@ type clientConfig struct {
 	retryOnStatus            map[int]bool
 	disableRetry             bool
 	maxRetries               uint8
+	customHeaders            []map[string]string
 }
 
 type internalRequest struct {
@@ -60,6 +62,7 @@ func newClient(cli *http.Client, host, apiKey string, cfg clientConfig) *client 
 		disableRetry:  cfg.disableRetry,
 		maxRetries:    cfg.maxRetries,
 		retryOnStatus: cfg.retryOnStatus,
+		customHeaders: cfg.customHeaders,
 	}
 
 	if c.retryOnStatus == nil {
@@ -228,6 +231,13 @@ func (c *client) sendRequest(
 	}
 	if c.apiKey != "" {
 		request.Header.Set("Authorization", "Bearer "+c.apiKey)
+	}
+	if c.customHeaders != nil {
+		for _, customHeader := range c.customHeaders {
+			for key, value := range customHeader {
+				request.Header.Set(key, value)
+			}
+		}
 	}
 
 	if req.withResponse != nil && !c.contentEncoding.IsZero() {

@@ -32,6 +32,7 @@ type meiliOpt struct {
 	retryOnStatus   map[int]bool
 	disableRetry    bool
 	maxRetries      uint8
+	customHeaders   []map[string]string
 }
 
 type encodingOpt struct {
@@ -63,6 +64,13 @@ func WithCustomClientWithTLS(tlsConfig *tls.Config) Option {
 func WithAPIKey(key string) Option {
 	return func(opt *meiliOpt) {
 		opt.apiKey = key
+	}
+}
+
+// WithCustomHeaders set custom headers
+func WithCustomHeaders(headers []map[string]string) Option {
+	return func(opt *meiliOpt) {
+		opt.customHeaders = headers
 	}
 }
 
