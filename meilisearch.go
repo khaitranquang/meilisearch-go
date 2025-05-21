@@ -33,6 +33,7 @@ func New(host string, options ...Option) ServiceManager {
 				disableRetry:             defOpt.disableRetry,
 				retryOnStatus:            defOpt.retryOnStatus,
 				maxRetries:               defOpt.maxRetries,
+				customHeaders:            defOpt.customHeaders,
 			},
 		),
 	}

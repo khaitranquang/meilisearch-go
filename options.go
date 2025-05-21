@@ -20,8 +20,9 @@ var (
 			503: true,
 			504: true,
 		},
-		disableRetry: false,
-		maxRetries:   3,
+		disableRetry:  false,
+		maxRetries:    3,
+		customHeaders: nil,
 	}
 )
 
